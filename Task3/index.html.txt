@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Responsive Login & Registration UI</title>
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    * {
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card {
+      border-radius: 1.5rem;
+      overflow: hidden;
+      box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+      transition: transform .3s ease-in-out;
+    }
+    .card:hover {
+      transform: scale(1.02);
+    }
+    .btn-custom {
+      background: #2575fc;
+      color: #fff;
+      border: none;
+      transition: all .3s;
+    }
+    .btn-custom:hover {
+      background: #6a11cb;
+    }
+    .form-control:focus {
+      box-shadow: none;
+      border-color: #6a11cb;
+    }
+    .toggle-link {
+      color: #2575fc;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    .fade-section {
+      display: none;
+      animation: fadeIn 0.5s forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 576px) {
+      .card { margin: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card p-4 col-md-5 col-11 bg-white">
+    <!-- Login Form -->
+    <div id="loginForm" class="fade-section" style="display:block;">
+      <h3 class="text-center mb-3 fw-bold">Login</h3>
+      <form id="loginFormElement" novalidate>
+        <div class="mb-3">
+          <label class="form-label">Email address</label>
+          <input type="email" class="form-control" id="loginEmail" placeholder="Enter your email" required>
+          <div class="invalid-feedback">Please enter a valid email.</div>
+        </div>
+        <div class="mb-3 position-relative">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-control" id="loginPassword" placeholder="Enter your password" required>
+          <i class="fa-solid fa-eye position-absolute top-50 end-0 translate-middle-y me-3" id="toggleLoginPass" style="cursor:pointer;"></i>
+          <div class="invalid-feedback">Password is required.</div>
+        </div>
+        <button type="submit" class="btn btn-custom w-100">Login</button>
+      </form>
+      <p class="text-center mt-3">
+        Don’t have an account? 
+        <span class="toggle-link" onclick="toggleForms()">Register here</span>
+      </p>
+    </div>
+
+    <!-- Register Form -->
+    <div id="registerForm" class="fade-section">
+      <h3 class="text-center mb-3 fw-bold">Register</h3>
+      <form id="registerFormElement" novalidate>
+        <div class="mb-3">
+          <label class="form-label">Full Name</label>
+          <input type="text" class="form-control" id="regName" placeholder="Enter full name" required>
+          <div class="invalid-feedback">Name is required.</div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Email address</label>
+          <input type="email" class="form-control" id="regEmail" placeholder="Enter your email" required>
+          <div class="invalid-feedback">Please enter a valid email.</div>
+        </div>
+        <div class="mb-3 position-relative">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-control" id="regPassword" placeholder="Enter password" required>
+          <i class="fa-solid fa-eye position-absolute top-50 end-0 translate-middle-y me-3" id="toggleRegPass" style="cursor:pointer;"></i>
+          <div class="invalid-feedback">Password must be at least 6 characters.</div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Confirm Password</label>
+          <input type="password" class="form-control" id="regConfirm" placeholder="Confirm password" required>
+          <div class="invalid-feedback">Passwords do not match.</div>
+        </div>
+        <button type="submit" class="btn btn-custom w-100">Register</button>
+      </form>
+      <p class="text-center mt-3">
+        Already have an account? 
+        <span class="toggle-link" onclick="toggleForms()">Login here</span>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // Toggle Between Forms
+    function toggleForms() {
+      const login = document.getElementById('loginForm');
+      const register = document.getElementById('registerForm');
+      if (login.style.display === 'block') {
+        login.style.display = 'none';
+        register.style.display = 'block';
+      } else {
+        register.style.display = 'none';
+        login.style.display = 'block';
+      }
+    }
+
+    // Password Toggle
+    const toggleLoginPass = document.getElementById('toggleLoginPass');
+    const loginPassword = document.getElementById('loginPassword');
+    toggleLoginPass.addEventListener('click', () => {
+      const type = loginPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+      loginPassword.setAttribute('type', type);
+      toggleLoginPass.classList.toggle('fa-eye-slash');
+    });
+
+    const toggleRegPass = document.getElementById('toggleRegPass');
+    const regPassword = document.getElementById('regPassword');
+    toggleRegPass.addEventListener('click', () => {
+      const type = regPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+      regPassword.setAttribute('type', type);
+      toggleRegPass.classList.toggle('fa-eye-slash');
+    });
+
+  
+// Login Validation
+document.getElementById('loginFormElement').addEventListener('submit', function (e) {
+  e.preventDefault();
+  const email = loginEmail.value.trim();
+  const pass = loginPassword.value.trim();
+
+  let valid = true;
+  if (!email || !email.includes('@')) {
+    loginEmail.classList.add('is-invalid'); valid = false;
+  } else { loginEmail.classList.remove('is-invalid'); }
+  
+  if (!pass) {
+    loginPassword.classList.add('is-invalid'); valid = false;
+  } else { loginPassword.classList.remove('is-invalid'); }
+
+  if (!valid) return;
+
+  // Send login request to PHP
+  fetch('logic.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: `email=${encodeURIComponent(email)}&password=${encodeURIComponent(pass)}`
+  })
+  .then(res => res.text())
+  .then(response => {
+    console.log(response); // Debug line, check console for actual PHP output
+    if(response.trim() === 'success'){
+      alert('Login Successful!');
+      this.reset();
+    } else if(response.trim() === 'invalid'){
+      alert('Incorrect password.');
+    } else if(response.trim() === 'notfound'){
+      alert('User not found. Please register.');
+    } else {
+      alert('Error: ' + response);
+    }
+  })
+  .catch(err => console.error(err));
+});
+
+    // Register Validation
+document.getElementById('registerFormElement').addEventListener('submit', function (e) {
+  e.preventDefault();
+  const name = regName.value.trim();
+  const email = regEmail.value.trim();
+  const pass = regPassword.value.trim();
+  const confirm = regConfirm.value.trim();
+
+  let valid = true;
+
+  if (name === '') { regName.classList.add('is-invalid'); valid = false; } else { regName.classList.remove('is-invalid'); }
+  if (!email.includes('@')) { regEmail.classList.add('is-invalid'); valid = false; } else { regEmail.classList.remove('is-invalid'); }
+  if (pass.length < 6) { regPassword.classList.add('is-invalid'); valid = false; } else { regPassword.classList.remove('is-invalid'); }
+  if (confirm !== pass || confirm === '') { regConfirm.classList.add('is-invalid'); valid = false; } else { regConfirm.classList.remove('is-invalid'); }
+
+  if (!valid) return;
+
+  // Send registration request to PHP
+  fetch('register.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: `fullname=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(pass)}`
+  })
+  .then(res => res.text())
+  .then(response => {
+    alert(response);
+    if(response.includes('success')){
+      this.reset();
+      toggleForms();
+    }
+  })
+  .catch(err => console.error(err));
+});
+  </script>
+</body>
+</html>
